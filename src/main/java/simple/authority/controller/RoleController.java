@@ -49,8 +49,8 @@ public class RoleController //extends AbstractUIController<ResourceRepository>
         return roleRepository.findAll();
     }
 
-    @ApiOperation(value = "添加资源", notes = "根据Resource对象创建资源")
-    @ApiImplicitParam(name = "resource", value = "资源详细实体resource", required = true, dataType = "Resource")
+    @ApiOperation(value = "创建角色", notes = "根据Role对象创建角色")
+    @ApiImplicitParam(name = "role", value = "角色对象", required = true, dataType = "Role")
     @RequestMapping(value = "", method = RequestMethod.POST)
     public String create(@RequestBody Role role) {
         try {
