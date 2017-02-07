@@ -42,5 +42,6 @@ public class Resource extends AbstractEntity {
     private String url;
 
     @ManyToMany(mappedBy = "resources")
+    @ApiModelProperty(hidden = true)
     private Set<Role> roles = new HashSet<>();
 }
