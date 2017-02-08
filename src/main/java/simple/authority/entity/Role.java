@@ -15,7 +15,6 @@ package simple.authority.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.test.bookpub.entity.Reviewer;
 import simple.authority.entity.base.AbstractEntity;
 
 import java.util.ArrayList;

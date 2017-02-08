@@ -13,7 +13,10 @@
 
 package simple.authority.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import simple.authority.swagger.AccessHiddenModelPropertyBuilder;
+import simple.authority.swagger.AccessHiddenParameterBuilder;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -26,6 +29,16 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class Swagger2Configuration {
+
+    @Bean
+    public AccessHiddenModelPropertyBuilder getHiddenBuilder() {
+        return new AccessHiddenModelPropertyBuilder();
+    }
+
+    @Bean
+    public AccessHiddenParameterBuilder getBuilder() {
+        return new AccessHiddenParameterBuilder();
+    }
 
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)

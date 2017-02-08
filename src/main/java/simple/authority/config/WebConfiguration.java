@@ -1,7 +1,6 @@
 package simple.authority.config;
 
 import org.apache.catalina.filters.RemoteIpFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
@@ -16,7 +15,6 @@ import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.test.bookpub.repository.BookRepository;
 
 import java.util.List;
 
@@ -83,6 +81,8 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     // 资源文件路由
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/internal/**").addResourceLocations("classpath:/");
+        registry.addResourceHandler("/swagger/**").addResourceLocations("classpath:/webjars/springfox-swagger-ui/");
+        registry.addResourceHandler("/jsoneditor/**").addResourceLocations("classpath:/webjars/jsoneditor/");
     }
 
     @Bean
