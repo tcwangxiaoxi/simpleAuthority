@@ -30,6 +30,9 @@
     <script src="/jsoneditor/jsoneditor.js"></script>
     <!-- jsoneditor-->
 
+    <!-- jsoneditor-in-swagger 在54行调用初始化入口-->
+    <script src='jsoneditor-in-swagger.js' type='text/javascript'></script>
+
     <script type="text/javascript">
         $(function () {
 
@@ -48,6 +51,7 @@
                 },
                 onComplete: function (data) {
                     initializeSpringfox();
+                    // jsoneditor-in-swagger 调用初始化入口
                     initJsoneditor();
                 },
                 docExpansion: "none",
@@ -90,36 +94,6 @@
                 window.springfox.uiConfig(function (data) {
                     window.swaggerUi.validatorUrl = data.validatorUrl;
                 });
-            }
-
-            function initJsoneditor() {
-                $(".snippet pre code").each(function (index, element) {
-
-                    var $currentCode = $(this);
-                    // 获取json数据
-                    var json = $currentCode.text();
-
-                    // 找到对应的行标签
-                    var $parents = $currentCode.parentsUntil(".operation-params")
-                    var $tr = $($parents[$parents.length - 1])
-
-                    if ($tr[0].nodeName == "TR") {
-                        // create the editor
-                        $tr.find(".body-textarea").after("<div class=\"jsoneditor\"></div>")
-                        var options = {
-                            mode: 'tree',
-                            //modes: ['code', 'form', 'text', 'tree', 'view'], // allowed modes
-                            onError: function (err) {
-                                alert(err.toString());
-                            },
-                            onModeChange: function (newMode, oldMode) {
-                                console.log('Mode switched from', oldMode, 'to', newMode);
-                            }
-                        };
-                        eval("var jsonObj = " + json)
-                        var editor = new JSONEditor($tr.find(".jsoneditor")[0], options, jsonObj);
-                    }
-                })
             }
         });
     </script>
