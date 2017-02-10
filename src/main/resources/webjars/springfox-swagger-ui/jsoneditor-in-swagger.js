@@ -1,3 +1,43 @@
+function getParentUntil($curNode, expression) {
+    var parents = $curNode.parentsUntil(expression)
+    return $(parents[parents.length - 1])
+}
+
+/**
+ * 根据路径删除Json对象的属性
+ * @param paths 路径（嵌套的对象用".'分隔）
+ * @param jsonObj Json对象
+ */
+function removeAttrByPaths(jsonObj, paths) {
+    //移除不需要展示的属性
+    for (i in paths) {
+        var item = paths[i]
+        // 该属性通过分隔符“.”，进行内嵌属性的移除。
+        var attrs = item.split(".")
+        // 移除对应层级下的属性
+        function deleteAttr(paths, obj) {
+            var curPath = paths[0]
+            var restPaths = paths.slice(1)
+            // 如果还有剩余的路径，说明还没有到删除的属性的那一层，需要继续递归
+            if (restPaths.length > 0) {
+                var curObj = obj[curPath]
+                // 如果该对象是数组类型的，则需要对该数组的每个属性进行递归
+                if (curObj instanceof Array) {
+                    for (index in curObj) {
+                        deleteAttr(restPaths, curObj[index])
+                    }
+                } else {
+                    deleteAttr(restPaths, curObj)
+                }
+            } else {
+                // 已经是最后一层了，删除属性
+                delete obj[curPath]
+            }
+        }
+        deleteAttr(attrs, jsonObj)
+    }
+}
+
 function mergeColumn($table) {
     //获取两列的宽度，和并到一个列中
     var ths = $table.find("tr th")
@@ -31,16 +71,17 @@ function initHiddenMaps() {
  *
  * 通过过滤项移除不需要展示的属性
  *
- * @param hiddenItems 需要移除的属性列表
+ * @param paths 需要移除的属性列表路径
  * @param jsonObj 当前的参数对象
  */
-function filterByHiddenParams(hiddenItems, jsonObj) {
-    //移除不需要展示的属性
-    for (i in hiddenItems) {
-        var item = hiddenItems[i]
+function filterByHiddenPaths(paths, jsonObj) {
+    //根据路径移除不需要展示的属性（嵌套的分隔符为“.”）
+    for (i in paths) {
+        var path = paths[i]
         // 该属性通过分隔符“.”，进行内嵌属性的移除。
         var attrs = item.split(".")
         // 移除对应层级下的属性
+
     }
 }
 
@@ -54,19 +95,16 @@ function initJsoneditor(data) {
         var json = $currentCode.text();
 
         // 应为要合并两列，所以先找到要隐藏的那列对应的td标签，并隐藏
-        var codeParents = $currentCode.parentsUntil("tr")
-        var $dataTypeTd = $(codeParents[codeParents.length - 1])
+        var $dataTypeTd = getParentUntil($currentCode, "tr")
 
         // 过滤其他不是参数形式的 pre code 标签
         if ($dataTypeTd[0].nodeName == "TD") {
             // 隐藏对应的td标签
             $dataTypeTd.hide()
             // 找到对应的行标签
-            var parents = $dataTypeTd.parentsUntil(".operation-params")
-            var $tr = $(parents[parents.length - 1])
+            var $tr = getParentUntil($dataTypeTd, ".operation-params")
 
-            var trParents = $tr.parentsUntil(".sandbox")
-            var $table = $(trParents[trParents.length - 1])
+            var $table = getParentUntil($tr, ".sandbox")
             if (!isMerged) {
                 // 合并原来的列两列为一列，每个表只需要处理一次
                 mergeColumn($table)
@@ -85,13 +123,13 @@ function initJsoneditor(data) {
                     alert(err.toString());
                 }
             };
-            eval("var jsonObj = " + json)
+            var jsonObj = JSON.parse(json)
 
             // 获取当前操作的ID
-            var actId = $table.parent().parent().attr("id")
+            var actId = getParentUntil($table, ".operations").attr("id")
 
-            var finalJsonObj = filterByHiddenParams(hiddenMaps[actId], jsonObj)
-            var editor = new JSONEditor($tr.find(".jsoneditor")[0], options, finalJsonObj);
+            removeAttrByPaths(hiddenMaps[actId], jsonObj)
+            var editor = new JSONEditor($tr.find(".jsoneditor")[0], options, jsonObj);
 
             // 添加提交的监听方法
             $table.parent().find(".submit").click(function (e) {
