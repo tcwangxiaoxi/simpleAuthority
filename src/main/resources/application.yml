@@ -1,10 +1,10 @@
 jdbc:
   dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-  url: jdbc:mysql://192.168.42.128:3306/SIMPLE_AUTHORITY
+  url: jdbc:mysql://192.168.246.3:3306/SIMPLE_AUTHORITY
   useUnicode: true
   charaterEncoding: utf8
   databaseName: SIMPLE_AUTHORITY
-  serverName: 192.168.42.128
+  serverName: 192.168.246.3
   username: root
   password: 123
   cachePrepStmts: true
