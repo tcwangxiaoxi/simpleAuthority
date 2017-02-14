@@ -9,6 +9,8 @@ import io.swagger.annotations.ExtensionProperty;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,8 +40,14 @@ public class ResourceController //extends AbstractUIController<ResourceRepositor
         return resourceRepository.findAll();
     }
 
+    @ApiOperation(value = "获取资源分页列表", notes = "")
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public Iterable<Resource> getUserList(Pageable page) {
+        return resourceRepository.findAll();
+    }
+
     @ApiOperation(value = "添加资源", notes = "根据Resource对象创建资源", extensions = {
-            @Extension(properties = @ExtensionProperty(name = AccessHiddenManager.HIDDEN, value = "roles"))
+            @Extension(properties = @ExtensionProperty(name = AccessHiddenManager.HIDDEN, value = "roles,isAvailable"))
     })
     @ApiImplicitParam(name = "resource", value = "资源详细实体resource", required = true, dataType = "Resource")
     @RequestMapping(value = "", method = RequestMethod.POST)

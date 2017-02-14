@@ -1,7 +1,9 @@
-package simple.authority.swagger;
+package simple.authority.swagger.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import simple.authority.swagger.doc_hidden.AccessHiddenManager;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -13,7 +15,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-public class Swagger2Configuration {
+public class Swagger2Configuration extends WebMvcConfigurerAdapter {
 
     @Bean
     public AccessHiddenManager getHiddenBuilder() {
@@ -37,5 +39,12 @@ public class Swagger2Configuration {
                 .contact("wangxiaoxi@winchannel.net")
                 .version("2.3")
                 .build();
+    }
+
+    @Override
+    // 资源文件路由
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/swagger/**").addResourceLocations("classpath:/webjars/springfox-swagger-ui/");
+        registry.addResourceHandler("/jsoneditor/**").addResourceLocations("classpath:/webjars/jsoneditor/");
     }
 }

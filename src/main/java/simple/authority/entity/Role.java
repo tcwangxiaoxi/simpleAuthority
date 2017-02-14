@@ -1,5 +1,6 @@
 package simple.authority.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import simple.authority.entity.base.AbstractEntity;
@@ -13,7 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"code"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"code" }))
 @Data
 public class Role extends AbstractEntity {
 
@@ -24,5 +25,6 @@ public class Role extends AbstractEntity {
     @ManyToMany
     private List<Resource> resources = new ArrayList();
     @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
     private List<User> users = new ArrayList();
 }

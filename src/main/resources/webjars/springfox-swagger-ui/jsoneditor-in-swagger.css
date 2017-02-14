@@ -1,0 +1,10 @@
+/* 修改集成后搜索框移位的样式问题 */
+.swagger-section .swagger-ui-wrap table tbody tr td {
+    padding: 0px;
+    border: 0px;
+}
+
+div.jsoneditorDiv {
+    margin: 2%;
+    width: 96%;
+}

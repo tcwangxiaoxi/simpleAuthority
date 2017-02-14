@@ -81,8 +81,6 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     // 资源文件路由
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/internal/**").addResourceLocations("classpath:/");
-        registry.addResourceHandler("/swagger/**").addResourceLocations("classpath:/webjars/springfox-swagger-ui/");
-        registry.addResourceHandler("/jsoneditor/**").addResourceLocations("classpath:/webjars/jsoneditor/");
     }
 
     @Bean

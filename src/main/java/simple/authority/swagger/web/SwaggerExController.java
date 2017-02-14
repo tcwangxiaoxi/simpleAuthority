@@ -14,6 +14,6 @@ public class SwaggerExController {
 
     @RequestMapping(value = "hiddenMaps", method = RequestMethod.GET)
     public Map<String, List<String>> hiddenMaps() {
-        return AccessHiddenManager.hiddenMapByApi;
+        return AccessHiddenManager.docViewAttrMapByApi;
     }
 }

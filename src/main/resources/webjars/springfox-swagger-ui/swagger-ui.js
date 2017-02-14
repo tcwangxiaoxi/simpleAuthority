@@ -21508,6 +21508,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
   // show the status codes
   showCompleteStatus: function(data, parent){
     parent.showStatus(data);
+    showResponseByJsonedit(parent,data);
   },
 
   // Adapted from http://stackoverflow.com/a/2893259/454004

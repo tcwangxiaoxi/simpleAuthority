@@ -1,8 +1,6 @@
 package simple.authority.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,6 +12,12 @@ import simple.authority.entity.Resource;
 import simple.authority.entity.Role;
 import simple.authority.repository.ResourceRepository;
 import simple.authority.repository.RoleRepository;
+import simple.authority.swagger.doc_hidden.AccessHiddenManager;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @RequestMapping("/role")
 @Api("role相关api")
@@ -24,6 +28,9 @@ public class RoleController //extends AbstractUIController<ResourceRepository>
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private ResourceRepository resourceRepository;
 
     /*@Override
     public ResourceRepository getRepository() {
@@ -36,11 +43,19 @@ public class RoleController //extends AbstractUIController<ResourceRepository>
         return roleRepository.findAll();
     }
 
-    @ApiOperation(value = "创建角色", notes = "根据Role对象创建角色")
+    @ApiOperation(value = "创建角色", notes = "根据Role对象创建角色", extensions = {
+            @Extension(properties = @ExtensionProperty(name = AccessHiddenManager.HIDDEN, value = "users,isAvailable")),
+            @Extension(properties = @ExtensionProperty(name = AccessHiddenManager.ONLY_SHOW, value = "resources.code"))
+    })
     @ApiImplicitParam(name = "role", value = "角色对象", required = true, dataType = "Role")
     @RequestMapping(value = "", method = RequestMethod.POST)
     public String create(@RequestBody Role role) {
         try {
+            List<Resource> resources = new ArrayList<>();
+            for (Resource resource : role.getResources()) {
+                resources.add(resourceRepository.findByCode(resource.getCode()));
+            }
+            role.setResources(resources);
             roleRepository.save(role);
             return "success";
         } catch (DataIntegrityViolationException exception) {
